@@ -34,7 +34,7 @@ COPY ./php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
 # recode reflection session shmop simplexml snmp soap sockets sodium spl standard sysvmsg sysvsem
 # sysvshm tidy tokenizer wddx xml xmlreader xmlrpc xmlwriter xsl zend_test zip
 RUN apk add --no-cache $PHPIZE_DEPS libpng libpng-dev libjpeg-turbo libjpeg-turbo-dev openssl-dev libzip libzip-dev libmcrypt libmcrypt-dev \
-  && docker-php-ext-install -j$(nproc) bcmath gd mysqli opcache pdo_mysql pcntl sockets shmop zip
+  && docker-php-ext-install -j$(nproc) bcmath gd mysqli pdo_mysql pcntl sockets shmop zip
 
 # 使用pecl和docker-php-ext-enable安装部分扩展
 # mcrypt扩展 https://pecl.php.net/package/mcrypt
