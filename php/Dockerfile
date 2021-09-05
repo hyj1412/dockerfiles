@@ -17,6 +17,17 @@ FROM php:${PHP_VERSION}-fpm-alpine
 # 3. mirrors.ustc.edu.cn (科大)
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
+COPY ./install.sh /tmp/
+WORKDIR /tmp
+RUN chmod +x install.sh \
+  && sh install.sh \
+  && rm -rf /tmp/install.sh
+
+# 复制一款可以在容器内安装php扩展的命令行工具到容器中
+# 地址: https://github.com/mlocati/docker-php-extension-installer
+ADD ./install-php-extensions  /usr/local/bin/
+RUN chmod uga+x /usr/local/bin/install-php-extensions
+
 # 设置时区
 ARG TZ=Asia/Shanghai
 RUN apk add --no-cache tzdata \
@@ -26,25 +37,4 @@ RUN apk add --no-cache tzdata \
 COPY ./php.ini "$PHP_INI_DIR/php.ini"
 COPY ./php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
 
-# docker-php-ext-install安装PHP扩展，扩展列表
-#
-# bcmath bz2 calendar ctype curl dba dom enchant exif fileinfo filter ftp gd gettext
-# gmp hash iconv imap interbase intl json ldap mbstring mysqli oci8 odbc opcache pcntl pdo
-# pdo_dblib pdo_firebird pdo_mysql pdo_oci pdo_odbc pdo_pgsql pdo_sqlite pgsql phar posix pspell readline
-# recode reflection session shmop simplexml snmp soap sockets sodium spl standard sysvmsg sysvsem
-# sysvshm tidy tokenizer wddx xml xmlreader xmlrpc xmlwriter xsl zend_test zip
-RUN apk add --no-cache $PHPIZE_DEPS libpng libpng-dev libjpeg-turbo libjpeg-turbo-dev openssl-dev libzip libzip-dev libmcrypt libmcrypt-dev \
-  && docker-php-ext-install -j$(nproc) bcmath gd mysqli pdo_mysql pcntl sockets shmop zip
-
-# 使用pecl和docker-php-ext-enable安装部分扩展
-# mcrypt扩展 https://pecl.php.net/package/mcrypt
-# redis扩展 https://pecl.php.net/package/redis
-# swoole扩展 https://pecl.php.net/package/swoole
-ARG PHP_EXT_MCRYPT_VERSION=1.0.4
-ARG PHP_EXT_REDIS_VERSION=5.3.4
-ARG PHP_EXT_SWOOLE_VERSION=4.7.0
-
-RUN pecl install mcrypt-${PHP_EXT_MCRYPT_VERSION} \
-  && pecl install redis-${PHP_EXT_REDIS_VERSION} \
-  && pecl install swoole-${PHP_EXT_SWOOLE_VERSION} \
-  && docker-php-ext-enable mcrypt redis swoole
+WORKDIR /var/www/html
