@@ -8,4 +8,4 @@
 
 ## php
 
-基于官方 `php:xxx-fpm-alpine`，调整了软件源，设置了时区，并安装了常用扩展 `pdo_mysql`, `mysqli`, `gd`, `opcache`,`redis`, `swoole`, `mcrypt`
+基于官方 `php:xxx-fpm-alpine`，调整了软件源，设置了时区，并安装了常用扩展 `pdo_mysql`, `mysqli`, `gd`, `opcache`,`redis`, `mcrypt`
