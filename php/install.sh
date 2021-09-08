@@ -2,7 +2,7 @@
 
 export MC="-j$(nproc)"
 # 定义需要安装的扩展
-PHP_EXTENSIONS='pdo_mysql,mysqli,gd,opcache,redis,mcrypt'
+PHP_EXTENSIONS=',bcmath,pdo_mysql,mysqli,gd,opcache,redis,mcrypt,'
 
 echo
 echo "============================================"
@@ -23,6 +23,11 @@ echo
 
 # 安装依赖库
 apk add --no-cache $PHPIZE_DEPS
+
+if [[ -z "${PHP_EXTENSIONS##*,bcmath,*}" ]]; then
+    echo "---------- Install bcmath ----------"
+	docker-php-ext-install ${MC} bcmath
+fi
 
 if [[ -z "${PHP_EXTENSIONS##*,pdo_mysql,*}" ]]; then
   echo "---------- Install pdo_mysql ----------"
