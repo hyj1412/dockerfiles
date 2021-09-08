@@ -8,4 +8,8 @@
 
 ## php
 
-基于官方 `php:xxx-fpm-alpine`，调整了软件源，设置了时区，并安装了常用扩展 `pdo_mysql`, `mysqli`, `gd`, `opcache`,`redis`, `mcrypt`
+基于官方 `php:xxx-fpm-alpine`，调整了软件源，设置了时区，并安装常用扩展 `bcmath`, `pdo_mysql`, `mysqli`, `gd`,`redis`, `mcrypt`
+
+## 感谢
+
+感谢 `dnmp` https://github.com/yeszao/dnmp
